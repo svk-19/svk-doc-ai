@@ -61,18 +61,18 @@ QUESTION:
 
 ANSWER:
 """
-
+    
+    
     try:
-
         response = model.generate_content(
             prompt
         )
-
         return response.text
-
-    except Exception as e:
-
-        return f"Error: {e}"
+    except Exception:
+        return (
+            "⚠️ Gemini API quota exceeded or temporarily unavailable.\n\n"
+            "Please wait a few minutes and try again."
+        )
 
 
 # --------------------------------------------------
@@ -99,13 +99,13 @@ Generate a professional summary.
 """
 
     try:
-
         response = model.generate_content(
             prompt
         )
-
         return response.text
-
-    except Exception as e:
-
-        return f"Summary Error: {e}"
+    except Exception:
+        
+        return (
+        "⚠️ Gemini API quota exceeded or temporarily unavailable.\n\n"
+        "Please wait a few minutes and try again."
+    )

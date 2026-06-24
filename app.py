@@ -102,6 +102,9 @@ if "pdf_loaded" not in st.session_state:
 if "pdf_summary" not in st.session_state:
     st.session_state.pdf_summary = ""
 
+if "document_summary" not in st.session_state:
+    st.session_state.document_summary = ""
+
 # --------------------------------------------------
 # SIDEBAR
 # --------------------------------------------------
@@ -247,7 +250,7 @@ if uploaded_file:
                     text[:15000]
                 )
 
-                st.session_state.pdf_summary = summary
+                st.session_state.document_summary = summary
 
     with col2:
 
@@ -402,3 +405,5 @@ if not uploaded_file:
     st.info(
         "👆 Upload a PDF to start chatting."
     )
+
+    
