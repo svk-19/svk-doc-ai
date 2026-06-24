@@ -1,4 +1,7 @@
 import streamlit as st
+import os
+os.makedirs("data", exist_ok=True)
+
 from datetime import datetime
 
 from utils.document_loader import (
@@ -195,14 +198,8 @@ if uploaded_file:
         f"data/uploaded.{file_extension}"
     )
 
-    with open(
-        file_path,
-        "wb"
-    ) as f:
-
-        f.write(
-            uploaded_file.getbuffer()
-        )
+    with open("data/uploaded.pdf", "wb") as f:
+        f.write(uploaded_file.getbuffer())
 
     st.success(
         f"✅ {file_extension.upper()} Uploaded Successfully"

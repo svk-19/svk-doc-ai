@@ -1,21 +1,16 @@
 streamlit==1.58.0
 
 chromadb
-
 sentence-transformers
-
 torch
-
 transformers
 
 pypdf
+python-docx
 
 python-dotenv
-
 google-generativeai
 
 langchain-text-splitters
 
 numpy
-
-python-docx
