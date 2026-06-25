@@ -219,6 +219,10 @@ if uploaded_file:
         chunks
     )
 
+    print("Chunks:", len(chunks))
+    print("Embeddings shape:", embeddings.shape)
+    print("First embedding length:", len(embeddings[0]))
+
     store_embeddings(
         chunks,
         embeddings
@@ -290,7 +294,7 @@ if uploaded_file:
         st.markdown(
             f"""
             <div class="answer-box">
-            {st.session_state.pdf_summary}
+            {st.session_state.document_summary}
             </div>
             """,
             unsafe_allow_html=True
