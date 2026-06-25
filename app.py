@@ -220,18 +220,24 @@ if uploaded_file:
     )
 
     print("Chunks:", len(chunks))
-    print("Embeddings shape:", embeddings.shape)
-    print("First embedding length:", len(embeddings[0]))
+    
+    try:
+        print("Embeddings shape:", embeddings.shape)
+    except Exception as e:
+        print("Shape Error:", e)
 
+    print("Embeddings type:", type(embeddings))
+    print("Embeddings:", embeddings)
+    
     store_embeddings(
+        
         chunks,
         embeddings
     )
-
     st.success(
         f"✅ Document Processed ({len(chunks)} Chunks)"
     )
-
+    
     st.session_state.pdf_loaded = True
 
     # ------------------------------------------

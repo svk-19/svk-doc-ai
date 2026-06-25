@@ -1,18 +1,14 @@
 from sentence_transformers import SentenceTransformer
-
-# --------------------------------------------------
-# EMBEDDING MODEL
-# --------------------------------------------------
+import numpy as np
 
 model = SentenceTransformer(
     "all-MiniLM-L6-v2"
 )
 
-# --------------------------------------------------
-# DOCUMENT EMBEDDINGS
-# --------------------------------------------------
-
 def create_embeddings(chunks):
+
+    if not chunks:
+        return np.array([])
 
     embeddings = model.encode(
         chunks,
@@ -20,11 +16,11 @@ def create_embeddings(chunks):
         normalize_embeddings=True
     )
 
+    print("Embedding type:", type(embeddings))
+    print("Embedding shape:", embeddings.shape)
+
     return embeddings
 
-# --------------------------------------------------
-# QUERY EMBEDDING
-# --------------------------------------------------
 
 def create_query_embedding(query):
 
