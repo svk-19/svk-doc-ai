@@ -38,12 +38,17 @@ def store_embeddings(
         f"chunk_{i}"
         for i in range(len(chunks))
     ]
-
-    collection.add(
+    
+    try:
+        collection.add(
         ids=ids,
         documents=chunks,
         embeddings=embeddings.tolist()
     )
+        
+    except Exception as e:
+     print("CHROMA ERROR:", str(e))
+     raise e
 
 # --------------------------------------------------
 # RETRIEVE CHUNKS
