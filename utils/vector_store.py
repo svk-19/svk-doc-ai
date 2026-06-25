@@ -43,7 +43,8 @@ def store_embeddings(
         collection.add(
         ids=ids,
         documents=chunks,
-        embeddings=embeddings.tolist()
+        embeddings=[list(map(float, emb)) for emb in embeddings]
+        
     )
         
     except Exception as e:
