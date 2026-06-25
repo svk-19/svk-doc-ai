@@ -20,6 +20,10 @@ def store_embeddings(chunks, embeddings):
         dtype=np.float32
     )
 
+    # Fix shape if somehow 1D
+    if embeddings_np.ndim == 1:
+        embeddings_np = embeddings_np.reshape(1, -1)
+
     dimension = embeddings_np.shape[1]
     index = faiss.IndexFlatL2(dimension)
     index.add(embeddings_np)
