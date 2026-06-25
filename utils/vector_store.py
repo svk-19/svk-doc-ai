@@ -4,9 +4,8 @@ import chromadb
 # CHROMA CLIENT
 # --------------------------------------------------
 
-client = chromadb.PersistentClient(
-    path="chroma_db"
-)
+client = chromadb.client()
+    
 
 collection = client.get_or_create_collection(
     name="pdf_rag"
