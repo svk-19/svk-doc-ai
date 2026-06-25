@@ -1,28 +1,13 @@
 import streamlit as st
 import os
-os.makedirs("data", exist_ok=True)
 
 from datetime import datetime
 
-from utils.document_loader import (
-    load_document
-)
+from utils.document_loader import load_document
 from utils.chunking import split_text
-
-from utils.embeddings import (
-    create_embeddings,
-    create_query_embedding
-)
-
-from utils.vector_store import (
-    store_embeddings,
-    retrieve_chunks
-)
-
-from utils.gemini_rag import (
-    generate_answer,
-    generate_pdf_summary
-)
+from utils.embeddings import create_embeddings, create_query_embedding
+from utils.vector_store import store_embeddings, retrieve_chunks
+from utils.gemini_rag import generate_answer, generate_pdf_summary
 
 # --------------------------------------------------
 # PAGE CONFIG
@@ -113,9 +98,7 @@ with st.sidebar:
 
     st.title("🤖 SVK Doc AI")
 
-    st.caption(
-        "Professional AI Document Assistant"
-    )
+    st.caption("Professional AI Document Assistant")
 
     st.divider()
 
@@ -135,7 +118,7 @@ with st.sidebar:
 
     st.info("LLM : Gemini 2.5 Flash")
     st.info("Embedding : MiniLM-L6-v2")
-    st.info("Vector DB : ChromaDB")
+    st.info("Vector DB : FAISS")       # ✅ updated
 
     st.divider()
 
@@ -149,13 +132,11 @@ with st.sidebar:
 
     with col1:
         if st.button("🆕 New Chat"):
-
             st.session_state.chat_history = []
             st.rerun()
 
     with col2:
         if st.button("🗑️ Clear"):
-
             st.session_state.chat_history = []
             st.rerun()
 
@@ -182,11 +163,7 @@ st.markdown(
 
 uploaded_file = st.file_uploader(
     "📄 Upload Document",
-    type=[
-        "pdf",
-        "docx",
-        "txt"
-    ]
+    type=["pdf", "docx", "txt"]
 )
 
 if uploaded_file:
@@ -197,47 +174,35 @@ if uploaded_file:
         .lower()
     )
 
-    file_path = (
-        f"data/uploaded.{file_extension}"
-    )
+    # ✅ Save to /tmp with correct extension
+    file_path = f"/tmp/uploaded.{file_extension}"
 
-    with open("data/uploaded.pdf", "wb") as f:
+    with open(file_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
 
     st.success(
         f"✅ {file_extension.upper()} Uploaded Successfully"
     )
 
-    text = load_document(
-        file_path,
-        file_extension
-    )
+    text = load_document(file_path, file_extension)
 
     chunks = split_text(text)
 
-    embeddings = create_embeddings(
-        chunks
-    )
+    embeddings = create_embeddings(chunks)
 
     print("Chunks:", len(chunks))
-    
+
     try:
         print("Embeddings shape:", embeddings.shape)
     except Exception as e:
         print("Shape Error:", e)
 
-    print("Embeddings type:", type(embeddings))
-    print("Embeddings:", embeddings)
-    
-    store_embeddings(
-        
-        chunks,
-        embeddings
-    )
+    store_embeddings(chunks, embeddings)
+
     st.success(
         f"✅ Document Processed ({len(chunks)} Chunks)"
     )
-    
+
     st.session_state.pdf_loaded = True
 
     # ------------------------------------------
@@ -247,31 +212,17 @@ if uploaded_file:
     col1, col2 = st.columns(2)
 
     with col1:
-
-        if st.button(
-            "📝 Generate Document Summary"
-        ):
-
-            with st.spinner(
-                "Creating Summary..."
-            ):
-
-                summary = generate_pdf_summary(
-                    text[:15000]
-                )
-
+        if st.button("📝 Generate Document Summary"):
+            with st.spinner("Creating Summary..."):
+                summary = generate_pdf_summary(text[:15000])
                 st.session_state.document_summary = summary
 
     with col2:
-
-        if st.button(
-            "📥 Export Chat"
-        ):
+        if st.button("📥 Export Chat"):
 
             export_text = ""
 
             for chat in st.session_state.chat_history:
-
                 export_text += (
                     f"\nQUESTION:\n"
                     f"{chat['question']}\n\n"
@@ -288,14 +239,12 @@ if uploaded_file:
             )
 
     # ------------------------------------------
-    # SUMMARY
+    # SUMMARY DISPLAY
     # ------------------------------------------
 
     if st.session_state.document_summary:
 
-        st.subheader(
-            "📄 Document Summary"
-        )
+        st.subheader("📄 Document Summary")
 
         st.markdown(
             f"""
@@ -312,28 +261,15 @@ if uploaded_file:
     # CHAT INPUT
     # ------------------------------------------
 
-    question = st.chat_input(
-        "Ask Anything About Your PDF..."
-    )
+    question = st.chat_input("Ask Anything About Your PDF...")
 
     if question:
 
-        query_embedding = (
-            create_query_embedding(
-                question
-            )
-        )
+        query_embedding = create_query_embedding(question)
 
-        results = retrieve_chunks(
-            query_embedding
-        )
+        results = retrieve_chunks(query_embedding)
 
-        retrieved_chunks = (
-            results["documents"][0]
-        )
-
-    
-
+        retrieved_chunks = results["documents"][0]
 
         # --------------------------------------
         # MEMORY CONTEXT
@@ -341,21 +277,15 @@ if uploaded_file:
 
         memory_context = ""
 
-        last_chats = (
-            st.session_state.chat_history[-3:]
-        )
+        last_chats = st.session_state.chat_history[-3:]
 
         for chat in last_chats:
-
             memory_context += (
                 f"User: {chat['question']}\n"
                 f"Assistant: {chat['answer']}\n\n"
             )
 
-        with st.spinner(
-            "🤖 Thinking..."
-        ):
-
+        with st.spinner("🤖 Thinking..."):
             answer = generate_answer(
                 question,
                 retrieved_chunks,
@@ -366,9 +296,7 @@ if uploaded_file:
             {
                 "question": question,
                 "answer": answer,
-                "time": datetime.now().strftime(
-                    "%H:%M"
-                )
+                "time": datetime.now().strftime("%H:%M")
             }
         )
 
@@ -380,9 +308,7 @@ if uploaded_file:
 
 if st.session_state.chat_history:
 
-    st.subheader(
-        "💬 Conversation"
-    )
+    st.subheader("💬 Conversation")
 
     for chat in st.session_state.chat_history:
 
@@ -411,9 +337,4 @@ if st.session_state.chat_history:
 # --------------------------------------------------
 
 if not uploaded_file:
-
-    st.info(
-        "👆 Upload a PDF to start chatting."
-    )
-
-    
+    st.info("👆 Upload a PDF to start chatting.")
