@@ -13,4 +13,4 @@ google-generativeai
 
 langchain-text-splitters
 
-numpy
+numpy==1.26.4
