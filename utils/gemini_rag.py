@@ -1,32 +1,18 @@
 import google.generativeai as genai
 import os
-
 from dotenv import load_dotenv
 
 load_dotenv()
 
-genai.configure(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+api_key = os.getenv("GEMINI_API_KEY")
 
-model = genai.GenerativeModel(
-    "gemini-2.5-flash"
-)
+genai.configure(api_key=api_key)
 
+model = genai.GenerativeModel("gemini-2.5-flash")
 
-# --------------------------------------------------
-# CHAT ANSWERS
-# --------------------------------------------------
+def generate_answer(question, retrieved_chunks, memory_context=""):
 
-def generate_answer(
-    question,
-    retrieved_chunks,
-    memory_context=""
-):
-
-    context = "\n\n".join(
-        retrieved_chunks
-    )
+    context = "\n\n".join(retrieved_chunks)
 
     prompt = f"""
 You are SVK Doc AI, a professional AI document assistant.
@@ -61,23 +47,13 @@ QUESTION:
 
 ANSWER:
 """
-    
-    
+
     try:
-        response = model.generate_content(
-            prompt
-        )
+        response = model.generate_content(prompt)
         return response.text
-    except Exception:
-        return (
-            "⚠️ Gemini API quota exceeded or temporarily unavailable.\n\n"
-            "Please wait a few minutes and try again."
-        )
+    except Exception as e:
+        return f"⚠️ Error: {str(e)}"  # ✅ shows real error now
 
-
-# --------------------------------------------------
-# PDF SUMMARY
-# --------------------------------------------------
 
 def generate_pdf_summary(text):
 
@@ -99,13 +75,7 @@ Generate a professional summary.
 """
 
     try:
-        response = model.generate_content(
-            prompt
-        )
+        response = model.generate_content(prompt)
         return response.text
-    except Exception:
-        
-        return (
-        "⚠️ Gemini API quota exceeded or temporarily unavailable.\n\n"
-        "Please wait a few minutes and try again."
-    )
+    except Exception as e:
+        return f"⚠️ Error: {str(e)}"  # ✅ shows real error now
