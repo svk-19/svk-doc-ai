@@ -15,6 +15,11 @@ CHUNKS_PATH = "/tmp/faiss_chunks.pkl"
 # --------------------------------------------------
 
 def store_embeddings(chunks, embeddings):
+
+    if not chunks:
+        print("No chunks to store.")
+        return
+
     embeddings_np = np.array(
         [list(map(float, emb)) for emb in embeddings],
         dtype=np.float32
@@ -48,10 +53,17 @@ def retrieve_chunks(query_embedding, top_k=8):
     with open(CHUNKS_PATH, "rb") as f:
         chunks = pickle.load(f)
 
+    # ✅ Guard: no chunks stored
+    if len(chunks) == 0:
+        return {"documents": [[]]}
+
     query_np = np.array(
         [list(map(float, query_embedding))],
         dtype=np.float32
     )
+
+    # ✅ Guard: don't request more than available
+    top_k = min(top_k, len(chunks))
 
     distances, indices = index.search(query_np, top_k)
 
