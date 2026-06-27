@@ -1,57 +1,28 @@
-# SVK Doc AI
+# 📄 SVK Doc AI
 
-Professional AI-powered Multi-Document Assistant built using RAG, Gemini AI, ChromaDB and Streamlit.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://svk-doc-ai.streamlit.app/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![RAG](https://img.shields.io/badge/RAG-Powered-success?style=for-the-badge)]()
+[![Gemini](https://img.shields.io/badge/Gemini%202.5%20Flash-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 
-## Features
+> Upload your PDFs and DOCX files — ask questions, get AI-powered answers using Retrieval-Augmented Generation (RAG).
 
-- PDF Upload
-- DOCX Upload
-- Semantic Search
-- Context Retrieval
-- AI Question Answering
-- Chat Memory
-- Document Summarization
-- Export Chat
-- Modern Dark UI
+🔗 **[Try it live →](https://svk-doc-ai.streamlit.app/)**
 
-## Tech Stack
+---
 
-- Python
-- Streamlit
-- Gemini 2.5 Flash
-- ChromaDB
-- Sentence Transformers
-- LangChain Text Splitters
+## ✨ Features
 
-## Project Architecture
+| Feature | Description |
+|---|---|
+| 📂 Multi-Document Upload | Supports PDF and DOCX files simultaneously |
+| 🔍 Semantic Search | MiniLM-L6-v2 embeddings via FAISS vector store |
+| 🤖 AI Q&A | Gemini 2.5 Flash answers based on your documents |
+| 🧠 Chat Memory | Remembers previous questions in the session |
+| 📝 Document Summarization | Summarize entire documents in one click |
+| 📤 Export Chat | Download your Q&A session |
+| 🌙 Dark UI | Clean, professional Streamlit interface |
 
-Document Upload
-↓
-Text Extraction
-↓
-Chunking
-↓
-Embeddings
-↓
-ChromaDB Storage
-↓
-Semantic Retrieval
-↓
-Gemini AI
-↓
-Answer Generation
+---
 
-## Installation
-
-```bash
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-## Developer
-
-Vamshi Krishna
-
-## Project
-
-SVK Doc AI transforms documents into intelligent conversations using Retrieval-Augmented Generation (RAG).
+## 🏗 Architecture
